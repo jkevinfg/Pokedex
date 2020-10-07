@@ -1,48 +1,70 @@
 const container = document.querySelector('.container')
 const result = document.querySelector('#result')
 const form = document.querySelector('#form')
+const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 20
-let pokemonInitial = 40
+const pokemonsPage = 50
+let pokemonInitial = 0
+let pokemonimg = 0
 let totalPages
 
 const listPokemon = () => {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
+    console.log(url)
     fetch(url).then(datos => {
         return datos.json()
     }).then(datos => {
         totalPages = pages(datos.count)
-        console.log(totalPages)
         showPokemons(datos.results)
     })
 }
-
-const showPokemons = (pokemons) => {
-    console.log(pokemons)
-    pokemons.forEach((pokemon)=> {
-        const {name} = pokemon
-        pokemonInitial = pokemonInitial + 1
-        const imgPokemon = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInitial}.png`
-        result.innerHTML += `<div> <h2>${name}</h2> <img src="${imgPokemon}">  </div>  `
-    })
-    printPaginator()
-
-}
-
-
-
-
-
-
-function *paginator(total ) {
-    for(let i = 1 ; i<= total ; i++){
-        yield i
-    }   
-}
-
 const pages = (total) => {
     return parseInt(Math.ceil(total / pokemonsPage))
 }
+const showPokemons = (pokemons) => {
+    clearHtml(result)
+    pokemons.forEach((pokemon)=> {
+        const {name} = pokemon
+        pokemonimg = pokemonimg + 1     
+        const imgPokemon = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonimg}.png`
+        result.innerHTML += `<div> <h2>${name}</h2> <img src="${imgPokemon}">  </div>  `
+    })
+    clearHtml(paginatorDiv)
+    printPaginator()
+}
+
+const clearHtml = (block) => {
+    while(block.firstChild){
+        block.removeChild(block.firstChild)
+    }
+}
+
+const printPaginator= () => {
+    iterador = paginator(totalPages)
+    console.log(totalPages)
+    while(true){
+        const {value,done} = iterador.next()
+        if(done) {
+            return
+        }
+        const button = document.createElement('a')
+        button.href = '#'
+        button.textContent = value
+        button.onclick = () => {
+            pokemonInitial = pokemonsPage + pokemonInitial
+            listPokemon()
+        }
+        paginatorDiv.appendChild(button)
+    }
+}
+
+function *paginator(total ) {
+    for(let i = 1 ; i<= total ; i++){
+        yield i 
+    }   
+}
+
+
 
 listPokemon()
 
