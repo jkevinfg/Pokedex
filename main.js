@@ -3,7 +3,7 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 10
+const pokemonsPage = 6
 let pokemonInitial = 0
 let totalPages
 
@@ -101,7 +101,7 @@ const searchPokemon= (name) => {
 
 const showPokemon = (datos) => {
     const {name, sprites :{other:{dream_world:{ front_default}}} } = datos
-    result.innerHTML = `<div class="card" > <h2 class="pokemonName">${name}</h2> <img  class = "pokemonImg"src="${imgPokemon}">  </div>  `
+    result.innerHTML = `<div class="card" > <h2 class="pokemonName">${name}</h2> <img  class = "pokemonImg"src="${front_default}">  </div>  `
 }
 
 
