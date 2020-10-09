@@ -3,37 +3,51 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 6
+const pokemonsPage = 30
 let pokemonInitial = 0
 let totalPages
 
 form.addEventListener('submit', (event)=> {
     event.preventDefault()
-    const pokemon = document.querySelector('#pokemon').value
+    const pokemon = document.querySelector('#pokemon').value.toLowerCase()
     if(pokemon === ''){
-        showError("Campo vacio")
+        showError("Campo vacio 🙄")
     }
     searchPokemon(pokemon)
 })
 const showError = (message) => {
-    clearHtml(result)
     const confirm = document.querySelector('.message')
     if(!confirm){
         pokemonInitial = 0
         const text = document.createElement('p')
         text.innerHTML = `<strong> ${message}</strong>`
         text.classList.add('message')
-        result.appendChild(text)
+        form.appendChild(text)
         setTimeout(()=> {
             text.remove()
             listPokemon()
-        },5000)
+        },3000)
+    }
+}
+const clearHtml = (block) => {
+    while(block.firstChild){
+        block.removeChild(block.firstChild)
     }
 }
 
+const loader = () => {
+    clearHtml(result)
+    const divLoader = document.createElement('div')
+    divLoader.innerHTML = `
+        <p> Cargando... </p>
+    `
+    result.appendChild(divLoader)
+}
+
+
 const listPokemon = () => {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
-    console.log(url)
+    loader()
     fetch(url).then(datos => {
         return datos.json()
     }).then(datos => {
@@ -41,7 +55,6 @@ const listPokemon = () => {
         showPokemons(datos.results)
     })
 }
-listPokemon()
 
 const pages = (total) => {
     return parseInt(Math.ceil(total / pokemonsPage))
@@ -51,20 +64,16 @@ const showPokemons = (pokemons) => {
     clearHtml(result)
     pokemons.forEach((pokemon)=> {
         const {name} = pokemon
-        pokemonInitial = pokemonInitial + 1     
-        const imgPokemon = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonInitial}.png`
+        pokemonInitial = pokemonInitial + 1
+        const imgPokemon = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemonInitial}.svg`
         result.innerHTML += `<div class="card" > <h2 class="pokemonName">${name}</h2> <img  class = "pokemonImg"src="${imgPokemon}">  </div>  `
     })
     clearHtml(paginatorDiv)
     printPaginator()
 }
                                                                                      
-const clearHtml = (block) => {
-    while(block.firstChild){
-        block.removeChild(block.firstChild)
-    }
-}
-
+// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+// 1 2 ... 9 10
 const printPaginator= () => {
     iterador = paginator(totalPages)
     while(true){
@@ -74,6 +83,7 @@ const printPaginator= () => {
         }
         const button = document.createElement('a')
         button.href = '#'
+        console.log(value)
         button.textContent = value
         button.onclick = () => {
             pokemonInitial = (value-1)*pokemonsPage
@@ -90,12 +100,15 @@ function *paginator(total ) {
 }
 
 const searchPokemon= (name) => {
+
     const url = `https://pokeapi.co/api/v2/pokemon/${name}`
-    console.log(url)
+    loader()
     fetch(url).then(datos => {
         return datos.json()
     }).then(datos => {
         showPokemon(datos)
+    }).catch(datos => {
+        showError(`${name} no es un pokemon  😟` ) 
     })
 }
 
@@ -105,9 +118,8 @@ const showPokemon = (datos) => {
 }
 
 
+listPokemon()
 
-function saludar(){
-    console.log("pruebaass!!!")
-}
+
 
 
