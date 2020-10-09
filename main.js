@@ -106,6 +106,8 @@ const showPokemon = (datos) => {
 
 
 
-
+function saludar(){
+    console.log("pruebaass!!!")
+}
 
 
