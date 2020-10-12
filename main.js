@@ -3,10 +3,9 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 3
+const pokemonsPage = 8
 let pokemonInitial = 0
 let totalPages
-
 
 
 const validate = (event) => {
@@ -67,34 +66,7 @@ const showPokemons =  (pokemons) => {
         fetch(url).then(datos => {
             return datos.json()
         }).then(datos => {
-            const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
-  
-    result.innerHTML += `<div class="card">
-                            <div class="card__header">
-                                ${name}
-                            </div>
-                            <div class="card__body">
-                                <img src="${front_default}" alt="Foto pokemon">
-                                <p class = "types${id}" > Type : </p>
-                                <p >   Height :  ${height/10}m </p>
-                                <p >  Weight : ${weight/10}kg</p>
-                                <p class = "stats${id}" > 
-
-                                </p>
-                            </div>
-                         </div>  
-    `
-
-    stats.forEach((stat) => {
-        const  {base_stat, stat : {name}}  =  stat
-        const text2 = document.querySelector(`.stats${id}`) 
-        text2.innerHTML += `<ul>${name} : ${base_stat}</ul>`       
-    })
-    types.forEach((item) => {
-        const { type : {name} } = item
-        const text = document.querySelector(`.types${id}`)
-        text.innerHTML += ` ${name} `
-    })
+            showPokemon(datos)
         })
         
     })
@@ -130,32 +102,47 @@ function *paginator(total ) {
 
 const showPokemon = (datos) => {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
-  
-    result.innerHTML = `<div class="card">
+    result.innerHTML  += `<div class="card">
                             <div class="card__header">
-                                ${name}
+                                <img src="${front_default}" alt="">
                             </div>
                             <div class="card__body">
-                                <img src="${front_default}" alt="Foto pokemon">
-                                <p class = "types${id}" > Type : </p>
-                                <p >   Height :  ${height/10}m </p>
-                                <p >  Weight : ${weight/10}kg</p>
-                                <p class = "stats${id}" > 
-
-                                </p>
+                                <div class="card__body__name">
+                                Name : ${name}
+                                </div>
+                                <div class="card__body__text">
+                                    <div class="card__body__text__type type${id}">
+                                     Type :
+                                    </div>
+                                    <div class="card__body__text__dimensions">
+                                        <p>Height : ${height/10}m</p>
+                                        <p>Weight :  ${weight/10}kg</p>
+                                    </div>
+                                </div>
                             </div>
-                         </div>  
+                            <div class="card__stats"> 
+                                <div class="card__stats_stat stats${id}">
+                                </div>
+                            </div>
+                        </div>
     `
 
     stats.forEach((stat) => {
         const  {base_stat, stat : {name}}  =  stat
         const text2 = document.querySelector(`.stats${id}`) 
-        text2.innerHTML += `<ul>${name} : ${base_stat}</ul>`       
+        text2.innerHTML += `
+                <div class="card__stats_stat__name " > 
+                ${name}        
+                </div>
+                <div class="card__stats_stat__value "> 
+                ${base_stat}
+                </div>
+        `       
     })
     types.forEach((item) => {
         const { type : {name} } = item
-        const text = document.querySelector(`.types${id}`)
-        text.innerHTML += ` ${name} `
+        const text = document.querySelector(`.type${id}`)
+        text.innerHTML += `${name} `
     })
 
 }
@@ -166,6 +153,7 @@ const searchPokemon= (nameOrId) => {
     fetch(url).then(datos => {
         return datos.json()
     }).then(datos => {
+        result.innerHTML = ''
         showPokemon(datos)
     }).catch(error => {
         showError(`${nameOrId}  is not a pokemon  😟` ) 
@@ -176,21 +164,6 @@ form.addEventListener('submit', validate)
 listPokemon()
 
 
-//probando filtrado
-const filterPokemon = () => {
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1050`
-    fetch(url).then(datos => {
-        return datos.json()
-    }).then(datos => {
-        showPokemon2(datos.results)
-    })
-}
 
-const showPokemon2 = (datos) => {
-    datos.forEach((item, i)=> {
-    })
-}
-
-filterPokemon()
 
 
