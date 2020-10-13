@@ -33,7 +33,7 @@ body {
     width: 20%;
     background: #fff;
     border: 1px solid #ccc;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     transition: 0.3s;
   }
  
@@ -96,4 +96,8 @@ body {
     height: 1.0rem;
     background-color:#5b9aa0;
     width: 0%;
+}
+.arrow {
+  height: 5%;
+  width: 5%;
 }

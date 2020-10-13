@@ -3,14 +3,13 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 6
+const pokemonsPage = 3
 let pokemonInitial = 0
 let totalPages
 
 
 form.addEventListener('submit', validate)
 listPokemon()
-
 
  function validate (event)  {
     event.preventDefault()
@@ -67,7 +66,7 @@ function  loader() {
     `
     result.appendChild(divLoader)
 }
-
+ 
 
 async function  listPokemon () {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
@@ -84,56 +83,53 @@ function  pages (total)  {
 }
 
 
-function showPokemons (pokemons) {
+ async function showPokemons(pokemons) {
     clearHtml(result)
-    pokemons.forEach( async (pokemon)=> {
-        const {url} = pokemon
+    for ( let i = 0 ; i<pokemons.length;i++){
+        const {url} = pokemons[i]
         const respuesta = await fetch(url)
         const resultado = await respuesta.json()
         showPokemon(resultado)
-    })
+    }
     clearHtml(paginatorDiv)
     printPaginator()
 }
                                                                                      
-// 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
-// 1 2 ... 9 10
 function printPaginator ()  {
-    console.log(totalPages)
-    for(let i = 1 ; i<totalPages+1 ; i++){
-        console.log(i)
-        const button = document.createElement('a')
-        button.href = '#'
-        button.textContent = i
-        button.onclick = () =>{
-            pokemonInitial = (i-1) * pokemonsPage
+    
+    const arrowBack = document.createElement('a')
+    arrowBack.innerHTML= `<img class = "arrow" src="./img/back.svg" alt="atras">`
+    if(pokemonInitial > 0){
+        arrowBack.href = '#'
+        arrowBack.onclick = () =>{
+            pokemonInitial = pokemonInitial - pokemonsPage
             listPokemon()
+            }
         }
-        paginatorDiv.appendChild(button)
-    }
-    // iterador = paginator(totalPages)
-    // while(true){
-    //     const {value,done} = iterador.next()
-    //     if(done) {
-    //         return
-    //     }
-    //     console.log(value)
-    //     const button = document.createElement('a')
-    //     button.href = '#'
-    //     button.textContent = value
-    //     button.onclick = () => {
-    //         pokemonInitial = (value-1)*pokemonsPage
-    //         listPokemon()
-    //     }
-    //     paginatorDiv.appendChild(button)
-    // }
-}
+    paginatorDiv.appendChild(arrowBack)
 
-// function *paginator(total ) {
-//     for(let i = 1 ; i<= total ; i++){
-//         yield i 
-//     }   
-// }
+    for(let i = 1 ; i<totalPages+1 ; i++){
+        const button = document.createElement('a')
+        if (i < 4 || i> totalPages - 4){
+            button.href = '#'
+            button.innerHTML = ` ${i}`
+            button.onclick = () =>{
+                pokemonInitial = (i-1) * pokemonsPage
+                listPokemon()
+            }
+            paginatorDiv.appendChild(button)
+        }
+    }
+        
+    const arrowNext = document.createElement('a')
+    arrowNext.href = '#'
+    arrowNext.innerHTML= `<img class = "arrow" src="./img/next.svg" alt="siguiente">`
+    arrowNext.onclick = () =>{
+        pokemonInitial = pokemonInitial + pokemonsPage
+        listPokemon()
+    }
+    paginatorDiv.appendChild(arrowNext)
+}
 
 function  showPokemon (datos) {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
