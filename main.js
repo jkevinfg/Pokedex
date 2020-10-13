@@ -120,14 +120,6 @@ const showPokemon = (datos) => {
                             </div>
                                 <div class="card__stats_stat stats${id} "></div>   
                         </div>`
-
-
-// const text = document.createElement('p')
-//         text.innerHTML = `<strong> ${message}</strong>`
-//         text.classList.add('message')
-//         form.appendChild(text)
-
-
     stats.forEach((stat) => {
         const  {base_stat, stat : {name}}  =  stat
         const text2 = document.querySelector(`.stats${id}`)
@@ -137,7 +129,7 @@ const showPokemon = (datos) => {
                                  ${base_stat}
                              </div>`
         const progressBar = document.querySelector(`.${name}${id}`)
-        progressBar.style.width = `${(base_stat/120)*100}%`
+        progressBar.style.width = `${(base_stat/150)*100}%`
     })
     types.forEach((item) => {
         const { type : {name} } = item
