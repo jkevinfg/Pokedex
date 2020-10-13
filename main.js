@@ -3,13 +3,16 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 4
+const pokemonsPage = 6
 let pokemonInitial = 0
 let totalPages
 
 
+form.addEventListener('submit', validate)
+listPokemon()
 
-const validate = (event) => {
+
+ function validate (event)  {
     event.preventDefault()
     const pokemon = document.querySelector('#pokemon').value.toLowerCase()
     if(pokemon === ''){
@@ -17,7 +20,23 @@ const validate = (event) => {
     }
     searchPokemon(pokemon)
 }
-const showError = (message) => {
+
+async function  searchPokemon  (nameOrId) {
+    const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
+    loader()
+    try{
+        const respuesta = await fetch(url)
+        const resultado = await respuesta.json()
+        result.innerHTML = ''
+        showPokemon(resultado)
+    }catch{
+        showError(`${nameOrId}  is not a pokemon  😟` ) 
+    }
+}
+
+
+
+function showError (message)  {
     const confirm = document.querySelector('.message')
     if(!confirm){
         pokemonInitial = 0
@@ -29,15 +48,18 @@ const showError = (message) => {
             text.remove()
             listPokemon()
         },3000)
+
     }
 }
-const clearHtml = (block) => {
+
+function  clearHtml (block) {
     while(block.firstChild){
         block.removeChild(block.firstChild)
     }
 }
 
-const loader = () => {
+
+function  loader() {
     clearHtml(result)
     const divLoader = document.createElement('div')
     divLoader.innerHTML = `
@@ -46,7 +68,8 @@ const loader = () => {
     result.appendChild(divLoader)
 }
 
-const listPokemon = async () => {
+
+async function  listPokemon () {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
     loader()
     const respuesta = await fetch(url)
@@ -55,12 +78,13 @@ const listPokemon = async () => {
     showPokemons(resultado.results)
 }
 
-const pages = (total) => {
+
+function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))
 }
 
 
-const showPokemons =  (pokemons) => {
+function showPokemons (pokemons) {
     clearHtml(result)
     pokemons.forEach( async (pokemon)=> {
         const {url} = pokemon
@@ -74,31 +98,44 @@ const showPokemons =  (pokemons) => {
                                                                                      
 // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
 // 1 2 ... 9 10
-const printPaginator= () => {
-    iterador = paginator(totalPages)
-    while(true){
-        const {value,done} = iterador.next()
-        if(done) {
-            return
-        }
+function printPaginator ()  {
+    console.log(totalPages)
+    for(let i = 1 ; i<totalPages+1 ; i++){
+        console.log(i)
         const button = document.createElement('a')
         button.href = '#'
-        button.textContent = value
-        button.onclick = () => {
-            pokemonInitial = (value-1)*pokemonsPage
+        button.textContent = i
+        button.onclick = () =>{
+            pokemonInitial = (i-1) * pokemonsPage
             listPokemon()
         }
         paginatorDiv.appendChild(button)
     }
+    // iterador = paginator(totalPages)
+    // while(true){
+    //     const {value,done} = iterador.next()
+    //     if(done) {
+    //         return
+    //     }
+    //     console.log(value)
+    //     const button = document.createElement('a')
+    //     button.href = '#'
+    //     button.textContent = value
+    //     button.onclick = () => {
+    //         pokemonInitial = (value-1)*pokemonsPage
+    //         listPokemon()
+    //     }
+    //     paginatorDiv.appendChild(button)
+    // }
 }
 
-function *paginator(total ) {
-    for(let i = 1 ; i<= total ; i++){
-        yield i 
-    }   
-}
+// function *paginator(total ) {
+//     for(let i = 1 ; i<= total ; i++){
+//         yield i 
+//     }   
+// }
 
-const showPokemon = (datos) => {
+function  showPokemon (datos) {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
     result.innerHTML  += `<div class="card">
                             <div class="card__header">
@@ -138,25 +175,6 @@ const showPokemon = (datos) => {
     })
 
 }
-
-const searchPokemon= async (nameOrId) => {
-    const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
-    loader()
-    try{
-        const respuesta = await fetch(url)
-        const resultado = await respuesta.json()
-        result.innerHTML = ''
-        showPokemon(resultado)
-    }catch{
-        showError(`${nameOrId}  is not a pokemon  😟` ) 
-    }
-    
-
-}
-
-form.addEventListener('submit', validate)
-listPokemon()
-
 
 
 

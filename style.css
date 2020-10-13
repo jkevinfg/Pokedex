@@ -4,7 +4,7 @@
 }
 
 body {
-    background: #fefefe;
+    background: #c83349;
     font-family: sans-serif;
   }  
   
@@ -89,11 +89,11 @@ body {
 }
 .progressBarspecial-defense {
     height: 1.0rem;
-    background-color: #073B4C;
+    background-color: #b8a9c9;
     width: 0%;
 }
 .progressBarspeed {
     height: 1.0rem;
-    background-color: #e63946;
+    background-color:#5b9aa0;
     width: 0%;
 }
