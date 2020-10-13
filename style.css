@@ -63,3 +63,37 @@ body {
       width: 80%;
     }
   }
+
+
+
+.progressBarhp {
+    height: 1.0rem;
+    background-color: #EF476F;
+    width: 0%;
+}
+
+.progressBarattack {
+    height: 1.0rem;
+    background-color: #FFD166;
+    width: 0%;
+}
+.progressBardefense {
+    height: 1.0rem;
+    background-color:  #06D6A0;
+    width: 0%;
+}
+.progressBarspecial-attack {
+    height: 1.0rem;
+    background-color: #118AB2;
+    width: 0%;
+}
+.progressBarspecial-defense {
+    height: 1.0rem;
+    background-color: #073B4C;
+    width: 0%;
+}
+.progressBarspeed {
+    height: 1.0rem;
+    background-color: #e63946;
+    width: 0%;
+}

@@ -3,9 +3,10 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const paginatorDiv = document.querySelector('#paginator')
 
-const pokemonsPage = 8
+const pokemonsPage = 4
 let pokemonInitial = 0
 let totalPages
+
 
 
 const validate = (event) => {
@@ -45,30 +46,27 @@ const loader = () => {
     result.appendChild(divLoader)
 }
 
-
-const listPokemon = () => {
+const listPokemon = async () => {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
     loader()
-    fetch(url).then(datos => {
-        return datos.json()
-    }).then(datos => {
-        totalPages = pages(datos.count)
-        showPokemons(datos.results)
-    })
+    const respuesta = await fetch(url)
+    const resultado = await respuesta.json()
+    totalPages = pages(resultado.count)
+    showPokemons(resultado.results)
 }
+
 const pages = (total) => {
     return parseInt(Math.ceil(total / pokemonsPage))
 }
+
+
 const showPokemons =  (pokemons) => {
     clearHtml(result)
-    pokemons.forEach(  (pokemon)=> {
-        const {name,url} = pokemon
-        fetch(url).then(datos => {
-            return datos.json()
-        }).then(datos => {
-            showPokemon(datos)
-        })
-        
+    pokemons.forEach( async (pokemon)=> {
+        const {url} = pokemon
+        const respuesta = await fetch(url)
+        const resultado = await respuesta.json()
+        showPokemon(resultado)
     })
     clearHtml(paginatorDiv)
     printPaginator()
@@ -120,24 +118,26 @@ const showPokemon = (datos) => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card__stats"> 
-                                <div class="card__stats_stat stats${id}">
-                                </div>
-                            </div>
-                        </div>
-    `
+                                <div class="card__stats_stat stats${id} "></div>   
+                        </div>`
+
+
+// const text = document.createElement('p')
+//         text.innerHTML = `<strong> ${message}</strong>`
+//         text.classList.add('message')
+//         form.appendChild(text)
+
 
     stats.forEach((stat) => {
         const  {base_stat, stat : {name}}  =  stat
-        const text2 = document.querySelector(`.stats${id}`) 
-        text2.innerHTML += `
-                <div class="card__stats_stat__name " > 
-                ${name}        
-                </div>
-                <div class="card__stats_stat__value "> 
-                ${base_stat}
-                </div>
-        `       
+        const text2 = document.querySelector(`.stats${id}`)
+        text2.innerHTML += `<div class="card__stats_stat__name" > ${name}        
+                            </div>
+                            <div class="card__stats_stat__value progressBar${name}  ${name}${id}"> 
+                                 ${base_stat}
+                             </div>`
+        const progressBar = document.querySelector(`.${name}${id}`)
+        progressBar.style.width = `${(base_stat/120)*100}%`
     })
     types.forEach((item) => {
         const { type : {name} } = item
@@ -147,22 +147,23 @@ const showPokemon = (datos) => {
 
 }
 
-const searchPokemon= (nameOrId) => {
+const searchPokemon= async (nameOrId) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
     loader()
-    fetch(url).then(datos => {
-        return datos.json()
-    }).then(datos => {
+    try{
+        const respuesta = await fetch(url)
+        const resultado = await respuesta.json()
         result.innerHTML = ''
-        showPokemon(datos)
-    }).catch(error => {
+        showPokemon(resultado)
+    }catch{
         showError(`${nameOrId}  is not a pokemon  😟` ) 
-    })
+    }
+    
+
 }
 
 form.addEventListener('submit', validate)
 listPokemon()
-
 
 
 
