@@ -1,19 +1,39 @@
 const container = document.querySelector('.container')
 const result = document.querySelector('#result')
 const form = document.querySelector('#form')
+const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
+const opciones = document.querySelector('.opciones')
 
-const pokemonsPage = 3
+let pokemonsPage = 3
 let pokemonInitial = 0
 let totalPages
 
 
 form.addEventListener('submit', validate)
-listPokemon()
+inputPokemon.addEventListener('input',filter)
 
+
+
+async function filter(event) {
+    opciones.innerHTML = ''
+    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1050`
+    const respuesta = await fetch(url)
+    const resultado = await respuesta.json()
+    const  text = event.target.value.toLowerCase().trim()
+    if (text.length > 1){
+        for (let pokemon of resultado.results){
+            let name = pokemon.name
+            if(name.indexOf(text) === 0 ){
+                opciones.innerHTML += `${name} `   
+            }
+        }
+    }
+}
  function validate (event)  {
     event.preventDefault()
-    const pokemon = document.querySelector('#pokemon').value.toLowerCase()
+    const pokemon = inputPokemon.value.toLowerCase()
+    console.log(pokemon)
     if(pokemon === ''){
         showError("Empty field 🙄")
     }
@@ -61,8 +81,7 @@ function  clearHtml (block) {
 function  loader() {
     clearHtml(result)
     const divLoader = document.createElement('div')
-    divLoader.innerHTML = `
-        <p> loading... </p>
+    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading"> loading
     `
     result.appendChild(divLoader)
 }
@@ -162,7 +181,7 @@ function  showPokemon (datos) {
                                  ${base_stat}
                              </div>`
         const progressBar = document.querySelector(`.${name}${id}`)
-        progressBar.style.width = `${(base_stat/150)*100}%`
+        progressBar.style.width = `${(base_stat/160)*100}%`
     })
     types.forEach((item) => {
         const { type : {name} } = item
@@ -174,3 +193,5 @@ function  showPokemon (datos) {
 
 
 
+
+listPokemon()
