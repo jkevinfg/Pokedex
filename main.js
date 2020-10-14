@@ -10,14 +10,14 @@ let pokemonInitial = 0
 let totalPages
 
 form.addEventListener('submit', validate)
-inputPokemon.addEventListener('keydown',filter)
-
+inputPokemon.addEventListener('input',filter)
 
 listPokemon()
 
 
+
 async function filter(event) {
-    optiones.innerHTML = ''
+    clearHtml(optiones)
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=500`
     const respuesta = await fetch(url)
     const resultado = await respuesta.json()
@@ -25,16 +25,16 @@ async function filter(event) {
         for (let pokemon of resultado.results){
             let name = pokemon.name
             if(name.indexOf(text) === 0  && text.length > 1 ){
-                optiones.innerHTML += `
-                    <li ><a   href="#">${name}</a>  </li>
-                 `
-                 optiones.onclick = () => {
-                     searchPokemon(name)
-                 }
+                const option = document.createElement('li')
+                option.textContent = `${name}`
+                option.classList.add(`inputOption`)
+                option.onclick = () => {
+                    searchPokemon(name)
+                }
+                optiones.appendChild(option)
             }
         }
 }
-
 
  function validate (event)  {
     event.preventDefault()
@@ -47,7 +47,6 @@ async function filter(event) {
 }
 
 async function  searchPokemon  (nameOrId) {
-    clearHtml(optiones)
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
     loader()
     try{
@@ -95,6 +94,7 @@ function  loader() {
  
 
 async function  listPokemon () {
+
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
     loader()
     const respuesta = await fetch(url)
@@ -124,7 +124,7 @@ function  pages (total)  {
 function printPaginator ()  {
     
     const arrowBack = document.createElement('a')
-    arrowBack.innerHTML= `<img class = "arrow" src="./img/back.svg" alt="atras">`
+    arrowBack.innerHTML= `   Listado completo :    <img class = "arrow" src="./img/back.svg" alt="atras">`
     if(pokemonInitial > 0){
         arrowBack.href = '#'
         arrowBack.onclick = () =>{

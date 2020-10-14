@@ -1,6 +1,7 @@
 *{
     padding: 0;
     margin: 0;
+    text-decoration: none;
 }
 
 body {
@@ -117,3 +118,6 @@ body {
   width: 300px;
 }
 
+.inputOption {
+  background-color: #06D6A0;
+}
