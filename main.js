@@ -3,33 +3,39 @@ const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
-const opciones = document.querySelector('.opciones')
+const optiones = document.querySelector('.optiones')
 
-let pokemonsPage = 3
+let pokemonsPage = 6
 let pokemonInitial = 0
 let totalPages
 
-
 form.addEventListener('submit', validate)
-inputPokemon.addEventListener('input',filter)
+inputPokemon.addEventListener('keydown',filter)
 
+
+listPokemon()
 
 
 async function filter(event) {
-    opciones.innerHTML = ''
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1050`
+    optiones.innerHTML = ''
+    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=500`
     const respuesta = await fetch(url)
     const resultado = await respuesta.json()
     const  text = event.target.value.toLowerCase().trim()
-    if (text.length > 1){
         for (let pokemon of resultado.results){
             let name = pokemon.name
-            if(name.indexOf(text) === 0 ){
-                opciones.innerHTML += `${name} `   
+            if(name.indexOf(text) === 0  && text.length > 1 ){
+                optiones.innerHTML += `
+                    <li ><a   href="#">${name}</a>  </li>
+                 `
+                 optiones.onclick = () => {
+                     searchPokemon(name)
+                 }
             }
         }
-    }
 }
+
+
  function validate (event)  {
     event.preventDefault()
     const pokemon = inputPokemon.value.toLowerCase()
@@ -41,6 +47,7 @@ async function filter(event) {
 }
 
 async function  searchPokemon  (nameOrId) {
+    clearHtml(optiones)
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
     loader()
     try{
@@ -81,7 +88,7 @@ function  clearHtml (block) {
 function  loader() {
     clearHtml(result)
     const divLoader = document.createElement('div')
-    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading"> loading
+    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading"> 
     `
     result.appendChild(divLoader)
 }
@@ -192,6 +199,3 @@ function  showPokemon (datos) {
 }
 
 
-
-
-listPokemon()
