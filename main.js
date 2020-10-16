@@ -13,7 +13,7 @@ let pokemonInitial = 0
 let totalPages
 
 form.addEventListener('submit', validate)
-inputPokemon.addEventListener('keydown',filter)
+inputPokemon.addEventListener('input',filter)
 
 listPokemon()
 
@@ -28,10 +28,11 @@ async function filter(event) {
         for (let pokemon of resultado.results){
             let name = pokemon.name
             if(name.indexOf(text) === 0  && text.length > 0){
-                const option = document.createElement('option')
-                option.value = `${name}`
-                optiones.appendChild(option)
+                const optionPokemon = document.createElement('option')
+                optionPokemon.value = `${name}`
+                optiones.appendChild(optionPokemon)
             }
+
         }
 }
 
@@ -134,34 +135,26 @@ function printPaginator ()  {
         }
     paginatorDiv.appendChild(arrowBack)
 
-    for(let i = 1 ; i<totalPages+1 ; i++){
-        const button = document.createElement('a')
-        // if (i < 4 || i> totalPages - 4){
-            button.href = '#'
-            button.innerHTML = ` ${i}`
-            button.onclick = () =>{
-                pokemonInitial = (i-1) * pokemonsPage
-                listPokemon()
-            }
-            paginatorDiv.appendChild(button)
-        // }
-    }
-        
     const arrowNext = document.createElement('a')
     arrowNext.innerHTML = 'Siguiente'
     arrowNext.classList.add('pagination-next')
     arrowNext.onclick = () =>{
         pokemonInitial = pokemonInitial + pokemonsPage
         listPokemon()
-    }
+    }   
     paginatorDiv.appendChild(arrowNext)
+
+        
+    
 }
 
 function  showPokemon (datos) {
     clearHtml(optiones)
+    console.log(datos)
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
     result.innerHTML  += `<div class="column is-4 card">
                             <div class=" image is-5by4 card__header">
+                                <div>#${id}</div>
                                 <img src="${front_default}" alt="">
                             </div>
                             <div class=" card__body">
