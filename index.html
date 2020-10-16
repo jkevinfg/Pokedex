@@ -10,17 +10,17 @@
 <body>
     <div class="container">
             <h1 class="title"> Pokedex - Primera Generación</h1>
-            <form  id="form" action="">
-                <div class="columns">
-                    <div class="column">
+            <form   class=" columns mb-5 " id="form" action="">
+                    <div class="column is-6">
                         <input list="optiones" autocomplete =off  id="inputPokemon"  class="input is-danger" placeholder="Encuentra a tu pokemon" type="text">
                         <datalist id="optiones">
                         </datalist>
+                        <div class="message-error">
+                        </div>
                     </div>
-                    <div class="column">
+                    <div class="column ">
                          <button class="button is-link" type="submit"> Buscar</button>
                     </div>
-                </div>
             </form>
             <div  class= "columns is-centered" id="result">
             </div>

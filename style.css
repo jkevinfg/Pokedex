@@ -34,3 +34,8 @@
     background-color:#5b9aa0;
     width: 0%;
 }
+.loader{
+  width: 60px;
+  height: 60px;
+
+}
