@@ -15,22 +15,6 @@ inputPokemon.addEventListener('keydown',filter)
 
 showPokemons()
 
-async function validate (event)  {
-    event.preventDefault()
-    const pokemon = inputPokemon.value.toLowerCase()
-    if(pokemon === ''){
-        showError("Campo vacío 🙄")
-    }else{
-        try{
-            const pokemonsearch = await fetchPokemon(pokemon)
-            clearHtml(result)
-            showPokemon(pokemonsearch)}
-        catch{
-            showError("no hay")
-        }
-    }
-}
-
 async function  fetchPokemon  (nameOrId) {
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
     const respuesta = await fetch(url)
@@ -43,6 +27,22 @@ async function fetchPokemons (pokemonInitial,pokemonsPage) {
     const resultado = await respuesta.json()
     totalPages = pages(151)
     return resultado.results
+}
+
+async function validate (event)  {
+    event.preventDefault()
+    const pokemon = inputPokemon.value.toLowerCase()
+    if(pokemon === ''){
+        showError("Campo vacío 🙄")
+    }else{
+        try{
+            const pokemonsearch = await fetchPokemon(pokemon)
+            clearHtml(result)
+            showPokemon(pokemonsearch)}
+        catch{
+            showError("Este pokemon no existe 🙄")
+        }
+    }
 }
 async function filter(event) {
     clearHtml(optiones)
