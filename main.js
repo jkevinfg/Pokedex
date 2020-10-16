@@ -15,26 +15,28 @@ inputPokemon.addEventListener('keydown',filter)
 
 showPokemons()
 
-function validate (event)  {
+async function validate (event)  {
     event.preventDefault()
     const pokemon = inputPokemon.value.toLowerCase()
     if(pokemon === ''){
         showError("Campo vacío 🙄")
-    }
-    clearHtml(result)
-    fetchPokemon(pokemon)
-}
-async function  fetchPokemon  (nameOrId) {
-    const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
-    try{
-        const respuesta = await fetch(url)
-        const resultado = await respuesta.json()
-        showPokemon(resultado)
-    }catch{
-        showError(`${nameOrId} no es un pokemon 😟` ) 
+    }else{
+        try{
+            const pokemonsearch = await fetchPokemon(pokemon)
+            clearHtml(result)
+            showPokemon(pokemonsearch)}
+        catch{
+            showError("no hay")
+        }
     }
 }
 
+async function  fetchPokemon  (nameOrId) {
+    const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
+    const respuesta = await fetch(url)
+    const resultado = await respuesta.json()
+    return resultado
+}
 async function fetchPokemons (pokemonInitial,pokemonsPage) {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
     const respuesta = await fetch(url)
@@ -42,7 +44,6 @@ async function fetchPokemons (pokemonInitial,pokemonsPage) {
     totalPages = pages(151)
     return resultado.results
 }
-
 async function filter(event) {
     clearHtml(optiones)
     const pokemons =  await fetchPokemons(0,151)
@@ -62,8 +63,10 @@ async function showPokemons() {
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
-        const {url,name} = pokemons[i]
-        fetchPokemon(name)
+            const {url,name} = pokemons[i]
+            const pokemon = await fetchPokemon(name)
+            showPokemon(pokemon)
+        
     }
     clearHtml(paginatorDiv)
     printPaginator()
