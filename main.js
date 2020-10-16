@@ -1,6 +1,3 @@
-// esta app es para los pokemones de la primera generacion , pero es facilmente adaptable a todos o los que quieran. 
-
-
 const container = document.querySelector('.container')
 const result = document.querySelector('#result')
 const form = document.querySelector('#form')
@@ -13,30 +10,12 @@ let pokemonInitial = 0
 let totalPages
 
 form.addEventListener('submit', validate)
-inputPokemon.addEventListener('input',filter)
+inputPokemon.addEventListener('keydown',filter)
 
-listPokemon()
+showPokemons()
 
-
-
-async function filter(event) {
-    clearHtml(optiones)
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=151`
-    const respuesta = await fetch(url)
-    const resultado = await respuesta.json()
-    const  text = event.target.value.toLowerCase().trim()
-        for (let pokemon of resultado.results){
-            let name = pokemon.name
-            if(name.indexOf(text) === 0  && text.length > 0){
-                const optionPokemon = document.createElement('option')
-                optionPokemon.value = `${name}`
-                optiones.appendChild(optionPokemon)
-            }
-
-        }
-}
-
- function validate (event)  {
+//validando el formulario
+function validate (event)  {
     event.preventDefault()
     const pokemon = inputPokemon.value.toLowerCase()
     console.log(pokemon)
@@ -46,111 +25,60 @@ async function filter(event) {
     searchPokemon(pokemon)
 }
 
+
+
+
+
+
+
+async function fetchPokemons () {
+    const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
+    const respuesta = await fetch(url)
+    const resultado = await respuesta.json()
+    return resultado.results
+}
+
+async function filter(event) {
+    clearHtml(optiones)
+    pokemonsPage = 151
+    pokemonInitial = 0
+    const pokemons =  await fetchPokemons()
+    const  text = event.target.value.toLowerCase().trim()
+        for (let pokemon of pokemons){
+            let name = pokemon.name
+            if(name.indexOf(text) === 0  && text.length > 0){
+                const optionPokemon = document.createElement('option')
+                optionPokemon.value = `${name}`
+                optiones.appendChild(optionPokemon)
+            }
+        }
+}
+
+async function showPokemons() {
+    const pokemons =  await fetchPokemons()
+    console.log(pokemons)
+    clearHtml(result)
+    for ( let i = 0 ; i<pokemons.length;i++){
+        const {url,name} = pokemons[i]
+        searchPokemon(name)
+    }
+    clearHtml(paginatorDiv)
+    printPaginator()
+}
+
 async function  searchPokemon  (nameOrId) {
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
     loader()
     try{
         const respuesta = await fetch(url)
         const resultado = await respuesta.json()
-        result.innerHTML = ''
         showPokemon(resultado)
     }catch{
         showError(`${nameOrId}  is not a pokemon  😟` ) 
     }
 }
 
-
-
-function showError (message)  {
-    const confirm = document.querySelector('.message')
-    if(!confirm){
-        pokemonInitial = 0
-        const text = document.createElement('p')
-        text.innerHTML = `<strong> ${message}</strong>`
-        text.classList.add('message')
-        form.appendChild(text)
-        setTimeout(()=> {
-            text.remove()
-            listPokemon()
-        },3000)
-
-    }
-}
-
-function  clearHtml (block) {
-    while(block.firstChild){
-        block.removeChild(block.firstChild)
-    }
-}
-
-
-function  loader() {
-    clearHtml(result)
-    const divLoader = document.createElement('div')
-    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading"> 
-    `
-    result.appendChild(divLoader)
-}
- 
-
-async function  listPokemon () {
-
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
-    loader()
-    const respuesta = await fetch(url)
-    const resultado = await respuesta.json()
-    totalPages = pages(151)
-    showPokemons(resultado.results)
-}
-
-
-function  pages (total)  {
-    return parseInt(Math.ceil(total / pokemonsPage))
-}
-
-
- async function showPokemons(pokemons) {
-    clearHtml(result)
-    for ( let i = 0 ; i<pokemons.length;i++){
-        const {url} = pokemons[i]
-        const respuesta = await fetch(url)
-        const resultado = await respuesta.json()
-        showPokemon(resultado)
-    }
-    clearHtml(paginatorDiv)
-    printPaginator()
-}
-                                                                                     
-function printPaginator ()  {
-    
-    const arrowBack = document.createElement('a')
-    arrowBack.innerHTML = 'Atrás'
-    arrowBack.classList.add('pagination-previous')
-    if(pokemonInitial > 0){
-        arrowBack.href = '#'
-        arrowBack.onclick = () =>{
-            pokemonInitial = pokemonInitial - pokemonsPage
-            listPokemon()
-            }
-        }
-    paginatorDiv.appendChild(arrowBack)
-
-    const arrowNext = document.createElement('a')
-    arrowNext.innerHTML = 'Siguiente'
-    arrowNext.classList.add('pagination-next')
-    arrowNext.onclick = () =>{
-        pokemonInitial = pokemonInitial + pokemonsPage
-        listPokemon()
-    }   
-    paginatorDiv.appendChild(arrowNext)
-
-        
-    
-}
-
 function  showPokemon (datos) {
-    clearHtml(optiones)
-    console.log(datos)
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
     result.innerHTML  += `<div class="column is-4 card">
                             <div class=" image is-5by4 card__header">
@@ -193,3 +121,70 @@ function  showPokemon (datos) {
 }
 
 
+
+
+function showError (message)  {
+    const confirm = document.querySelector('.message')
+    if(!confirm){
+        pokemonInitial = 0
+        const text = document.createElement('p')
+        text.innerHTML = `<strong> ${message}</strong>`
+        text.classList.add('message')
+        form.appendChild(text)
+        setTimeout(()=> {
+            text.remove()
+            listPokemon()
+        },3000)
+
+    }
+}
+
+function  clearHtml (block) {
+    while(block.firstChild){
+        block.removeChild(block.firstChild)
+    }
+}
+
+
+function  loader() {
+    clearHtml(result)
+    const divLoader = document.createElement('div')
+    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading"> 
+    `
+    result.appendChild(divLoader)
+}
+ 
+
+
+
+function  pages (total)  {
+    return parseInt(Math.ceil(total / pokemonsPage))
+}
+
+                                                                                     
+function printPaginator ()  {
+    
+    const arrowBack = document.createElement('a')
+    arrowBack.innerHTML = 'Atrás'
+    arrowBack.classList.add('pagination-previous')
+    if(pokemonInitial > 0){
+        arrowBack.href = '#'
+        arrowBack.onclick = () =>{
+            pokemonInitial = pokemonInitial - pokemonsPage
+            showPokemons()
+            }
+        }
+    paginatorDiv.appendChild(arrowBack)
+
+    const arrowNext = document.createElement('a')
+    arrowNext.innerHTML = 'Siguiente'
+    arrowNext.classList.add('pagination-next')
+    arrowNext.onclick = () =>{
+        pokemonInitial = pokemonInitial + pokemonsPage
+        showPokemons()
+    }   
+    paginatorDiv.appendChild(arrowNext)
+
+        
+    
+}
