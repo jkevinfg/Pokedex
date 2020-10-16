@@ -1,16 +1,19 @@
+// esta app es para los pokemones de la primera generacion , pero es facilmente adaptable a todos o los que quieran. 
+
+
 const container = document.querySelector('.container')
 const result = document.querySelector('#result')
 const form = document.querySelector('#form')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
-const optiones = document.querySelector('.optiones')
+const optiones = document.querySelector('#optiones')
 
-let pokemonsPage = 6
+let pokemonsPage = 3
 let pokemonInitial = 0
 let totalPages
 
 form.addEventListener('submit', validate)
-inputPokemon.addEventListener('input',filter)
+inputPokemon.addEventListener('keydown',filter)
 
 listPokemon()
 
@@ -18,19 +21,15 @@ listPokemon()
 
 async function filter(event) {
     clearHtml(optiones)
-    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=500`
+    const url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=151`
     const respuesta = await fetch(url)
     const resultado = await respuesta.json()
     const  text = event.target.value.toLowerCase().trim()
         for (let pokemon of resultado.results){
             let name = pokemon.name
-            if(name.indexOf(text) === 0  && text.length > 1 ){
-                const option = document.createElement('li')
-                option.textContent = `${name}`
-                option.classList.add(`inputOption`)
-                option.onclick = () => {
-                    searchPokemon(name)
-                }
+            if(name.indexOf(text) === 0  && text.length > 0){
+                const option = document.createElement('option')
+                option.value = `${name}`
                 optiones.appendChild(option)
             }
         }
@@ -99,7 +98,7 @@ async function  listPokemon () {
     loader()
     const respuesta = await fetch(url)
     const resultado = await respuesta.json()
-    totalPages = pages(resultado.count)
+    totalPages = pages(151)
     showPokemons(resultado.results)
 }
 
@@ -124,7 +123,8 @@ function  pages (total)  {
 function printPaginator ()  {
     
     const arrowBack = document.createElement('a')
-    arrowBack.innerHTML= `   Listado completo :    <img class = "arrow" src="./img/back.svg" alt="atras">`
+    arrowBack.innerHTML = 'Atrás'
+    arrowBack.classList.add('pagination-previous')
     if(pokemonInitial > 0){
         arrowBack.href = '#'
         arrowBack.onclick = () =>{
@@ -136,7 +136,7 @@ function printPaginator ()  {
 
     for(let i = 1 ; i<totalPages+1 ; i++){
         const button = document.createElement('a')
-        if (i < 4 || i> totalPages - 4){
+        // if (i < 4 || i> totalPages - 4){
             button.href = '#'
             button.innerHTML = ` ${i}`
             button.onclick = () =>{
@@ -144,12 +144,12 @@ function printPaginator ()  {
                 listPokemon()
             }
             paginatorDiv.appendChild(button)
-        }
+        // }
     }
         
     const arrowNext = document.createElement('a')
-    arrowNext.href = '#'
-    arrowNext.innerHTML= `<img class = "arrow" src="./img/next.svg" alt="siguiente">`
+    arrowNext.innerHTML = 'Siguiente'
+    arrowNext.classList.add('pagination-next')
     arrowNext.onclick = () =>{
         pokemonInitial = pokemonInitial + pokemonsPage
         listPokemon()
@@ -158,12 +158,13 @@ function printPaginator ()  {
 }
 
 function  showPokemon (datos) {
+    clearHtml(optiones)
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
-    result.innerHTML  += `<div class="card">
-                            <div class="card__header">
+    result.innerHTML  += `<div class="column is-4 card">
+                            <div class=" image is-5by4 card__header">
                                 <img src="${front_default}" alt="">
                             </div>
-                            <div class="card__body">
+                            <div class=" card__body">
                                 <div class="card__body__name">
                                 Name : ${name}
                                 </div>
@@ -177,7 +178,7 @@ function  showPokemon (datos) {
                                     </div>
                                 </div>
                             </div>
-                                <div class="card__stats_stat stats${id} "></div>   
+                            <div class="card__stats_stat stats${id} "></div>   
                         </div>`
     stats.forEach((stat) => {
         const  {base_stat, stat : {name}}  =  stat

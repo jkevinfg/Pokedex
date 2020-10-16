@@ -4,26 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  
     <div class="container">
-            <h1 class="title"> Pokedex</h1>
+            <h1 class="title"> Pokedex - Primera Generación</h1>
             <form  id="form" action="">
-                <input id="inputPokemon" placeholder="Find your pokemon" type="text">
-                <ul class="optiones">
-                </ul>
-                <button type="submit"> Search</button>
+                <div class="columns">
+                    <div class="column">
+                        <input list="optiones" autocomplete =off  id="inputPokemon"  class="input is-danger" placeholder="Encuentra a tu pokemon" type="text">
+                        <datalist id="optiones">
+                        </datalist>
+                    </div>
+                    <div class="column">
+                         <button class="button is-link" type="submit"> Buscar</button>
+                    </div>
+                </div>
             </form>
-            <div  class="row" id="result">       
+            <div  class= "columns is-desktop is-centered" id="result">       
             </div>
-            <div id="paginator">
-           
-            </div>
-            <footer>
-                <p>Software developer<a href="https://twitter.com/kevinfg_10"> JairKevinFG </a></p>
-            </footer>            
+            <div class="pagination is-centered" role="navigation" aria-label="pagination"  id="paginator">
+            </div> 
+
+            <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                <a class="pagination-previous">Previous</a>
+                <a class="pagination-next">Next page</a>
+                <ul class="pagination-list">
+                  <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                  <li><span class="pagination-ellipsis">&hellip;</span></li>
+                  <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+                  <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+                  <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+                  <li><span class="pagination-ellipsis">&hellip;</span></li>
+                  <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+                </ul>
+              </nav>
+
+              
+ 
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <strong>Software developer</strong> - <a href="https://twitter.com/kevinfg_10"> JairKevinFG </a>
+                </div>
+              </footer>        
     </div>
 </body>
 <script src="./main.js"></script>

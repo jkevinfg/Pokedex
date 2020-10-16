@@ -1,71 +1,7 @@
-*{
-    padding: 0;
-    margin: 0;
-    text-decoration: none;
-}
-
-body {
-    background: #c83349;
-    font-family: sans-serif;
-  }  
-  
-.container {
-    width: 90%;
-    margin: 50px auto;
-  }
-  .title {
-    text-align: center;
-    font-size: 30px;
-    margin-bottom: 50px;
-  }
-
-  #form {
-    text-align: center;
-    
-  }
-
-  .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-flow: wrap;
-  }
-  .card {
-    width: 10%;
-    background: #fff;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    transition: 0.3s;
-  }
- 
-
   .card:hover {
     transform: scale(1.05);
     box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
   }
-  
-  @media screen and (max-width: 1000px) {
-    .card {
-      width: 20%;
-    }
-  }
-  
-  @media screen and (max-width: 620px) {
-    .container {
-      width: 100%;
-    }
-  
-    .heading {
-      padding: 20px;
-      font-size: 20px;
-    }
-  
-    .card {
-      width: 80%;
-    }
-  }
-
-
 
 .progressBarhp {
     height: 1.0rem;
@@ -101,23 +37,4 @@ body {
 .arrow {
   height: 5%;
   width: 5%;
-}
-
-#paginator {
-  text-align: center;
-}
-
-.loader {
-  height: 200px;
-  width: 200px;
-
-}
-
-.imgPokemon {
-  height: 300px;
-  width: 300px;
-}
-
-.inputOption {
-  background-color: #06D6A0;
 }
