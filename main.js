@@ -39,7 +39,6 @@ async function validate (event)  {
         showError("Campo vacío 🙄")
     }else{
         try{
-            loader()
             const pokemonsearch = await fetchPokemon(pokemon)
             clearHtml(result)
             showPokemon(pokemonsearch)}
