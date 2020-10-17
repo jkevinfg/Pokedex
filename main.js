@@ -4,12 +4,13 @@ const form = document.querySelector('#form')
 const messageError  = document.querySelector('.message-error')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
+const paginationList = document.querySelector('#paginatorList')
 const optiones = document.querySelector('#optiones')
 
 let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
-let totalPages 
-
+let totalPages  // total de paginas 
+let paginaactual = 1
 form.addEventListener('submit', validate)
 inputPokemon.addEventListener('keydown',filter)
 
@@ -25,9 +26,10 @@ async function fetchPokemons (pokemonInitial,pokemonsPage) {
     const url = `https://pokeapi.co/api/v2/pokemon/?offset=${pokemonInitial}&limit=${pokemonsPage}`
     const respuesta = await fetch(url)
     const resultado = await respuesta.json()
-    totalPages = pages(151)
     return resultado.results
 }
+//
+console.log(totalPages)
 
 async function validate (event)  {
     event.preventDefault()
@@ -66,9 +68,9 @@ async function showPokemons() {
             const {url,name} = pokemons[i]
             const pokemon = await fetchPokemon(name)
             showPokemon(pokemon)
-        
     }
     clearHtml(paginatorDiv)
+    clearHtml(paginationList)
     printPaginator()
 }
 function  showPokemon (datos) {
@@ -113,6 +115,11 @@ function  showPokemon (datos) {
 
 }
 function printPaginator ()  {   
+    totalPages = pages(151)
+    console.log(pokemonInitial)
+    
+    console.log(totalPages)
+
     const arrowBack = document.createElement('a')
     arrowBack.innerHTML = 'Atrás'
     arrowBack.classList.add('pagination-previous')
@@ -122,19 +129,39 @@ function printPaginator ()  {
             pokemonInitial = pokemonInitial - pokemonsPage
             showPokemons()
             }
-        }
+        }   
     paginatorDiv.appendChild(arrowBack)
 
     const arrowNext = document.createElement('a')
     arrowNext.innerHTML = 'Siguiente'
     arrowNext.classList.add('pagination-next')
-    arrowNext.onclick = () =>{
-        pokemonInitial = pokemonInitial + pokemonsPage
-        showPokemons()
-    }   
+    if(pokemonInitial <  150){
+        arrowNext.href='#'
+        arrowNext.onclick = () =>{
+            pokemonInitial = pokemonInitial + pokemonsPage
+            showPokemons()
+        }   
+    } 
     paginatorDiv.appendChild(arrowNext)   
+
+    for (let i = 1 ; i< totalPages+1; i++){
+        const item = document.createElement('a')
+        item.innerHTML = `${i}`
+        item.classList.add('pagination-link',`page${i}`)
+        item.onclick = () => {
+            pokemonInitial = (i-1)*pokemonsPage
+            item.classList.add('is-current')
+            showPokemons()
+        }
+        paginationList.appendChild(item)   
+    }
+}
+function  pages (total)  {
+    return parseInt(Math.ceil(total / pokemonsPage))
 }
 
+
+    
 function showError (message)  {
     const confirm = document.querySelector('.message')
     if(!confirm){
@@ -158,7 +185,3 @@ function  loader() {
     divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading">`
     result.appendChild(divLoader)
 }
-function  pages (total)  {
-    return parseInt(Math.ceil(total / pokemonsPage))
-}
-
