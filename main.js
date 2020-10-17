@@ -39,6 +39,7 @@ async function validate (event)  {
         showError("Campo vacío 🙄")
     }else{
         try{
+            loader()
             const pokemonsearch = await fetchPokemon(pokemon)
             clearHtml(result)
             showPokemon(pokemonsearch)}
@@ -62,6 +63,7 @@ async function filter(event) {
 }                                              
 
 async function showPokemons() {
+    loader() 
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
@@ -185,6 +187,6 @@ function  clearHtml (block) {
 }
 function  loader() {
     const divLoader = document.createElement('div')
-    divLoader.innerHTML = `<img  class="loader"src="./img/pokebola.svg" alt="loading">`
+    divLoader.innerHTML = `Cargando...`
     result.appendChild(divLoader)
 }
