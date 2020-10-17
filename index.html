@@ -10,6 +10,7 @@
 <body>
     <div class="container">
             <h1 class="title"> Pokedex - Primera Generación</h1>
+           
             <form   class=" columns mb-5 " id="form" action="">
                     <div class="column is-6">
                         <input list="optiones" autocomplete =off  id="inputPokemon"  class="input is-danger" placeholder="Encuentra a tu pokemon" type="text">
@@ -22,18 +23,18 @@
                          <button class="button is-link" type="submit"> Buscar</button>
                     </div>
             </form>
+            <div class="pagination">
+                <div id="paginator" class="pagination-list"  role="navigation" aria-label="pagination">
+
+                </div>
+
+            </div>
+      
+
             <div  class= "columns is-centered" id="result">
             </div>
-            <div id="paginator" class="pagination"  role="navigation" aria-label="pagination">
-                <a class="pagination-previous">Previous</a>
-                <a class="pagination-next">Next page</a>
-                
-            </div>
-            <ul id="paginatorList" class="pagination-list">
-                <!-- <li>
-                    <a class="pagination-link is-current" aria-label="Goto page 1">1</a>
-                </li> -->
-            </ul>
+          
+      
             <footer class="footer">
                 <div class="content has-text-centered">
                     <strong>Software developer</strong> - <a href="https://twitter.com/kevinfg_10"> JairKevinFG </a>

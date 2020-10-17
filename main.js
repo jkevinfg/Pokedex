@@ -4,17 +4,19 @@ const form = document.querySelector('#form')
 const messageError  = document.querySelector('.message-error')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
-const paginationList = document.querySelector('#paginatorList')
 const optiones = document.querySelector('#optiones')
 
-let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
+let pokemonsPage = 9 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
 let totalPages  // total de paginas 
-let paginaactual = 1
-form.addEventListener('submit', validate)
-inputPokemon.addEventListener('keydown',filter)
 
-showPokemons()
+
+window.onload = () => {
+    form.addEventListener('submit', validate)
+    inputPokemon.addEventListener('keydown',filter)
+    showPokemons()
+};
+
 
 async function  fetchPokemon  (nameOrId) {
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
@@ -29,7 +31,6 @@ async function fetchPokemons (pokemonInitial,pokemonsPage) {
     return resultado.results
 }
 //
-console.log(totalPages)
 
 async function validate (event)  {
     event.preventDefault()
@@ -61,7 +62,6 @@ async function filter(event) {
 }                                              
 
 async function showPokemons() {
-    loader()
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
@@ -70,12 +70,13 @@ async function showPokemons() {
             showPokemon(pokemon)
     }
     clearHtml(paginatorDiv)
-    clearHtml(paginationList)
     printPaginator()
+
 }
 function  showPokemon (datos) {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
-    result.innerHTML  += `<div class="column is-4 card">
+    result.innerHTML  += `
+                    <div class="column is-4 card">
                             <div class=" image is-5by4 card__header">
                                 <div>#${id}</div>
                                 <img src="${front_default}" alt="">
@@ -116,9 +117,8 @@ function  showPokemon (datos) {
 }
 function printPaginator ()  {   
     totalPages = pages(151)
-    console.log(pokemonInitial)
-    
     console.log(totalPages)
+    console.log(pokemonInitial)
 
     const arrowBack = document.createElement('a')
     arrowBack.innerHTML = 'Atrás'
@@ -128,22 +128,23 @@ function printPaginator ()  {
         arrowBack.onclick = () =>{
             pokemonInitial = pokemonInitial - pokemonsPage
             showPokemons()
+
             }
         }   
     paginatorDiv.appendChild(arrowBack)
-
+ 
     const arrowNext = document.createElement('a')
     arrowNext.innerHTML = 'Siguiente'
     arrowNext.classList.add('pagination-next')
-    if(pokemonInitial <  150){
+    if(pokemonInitial < 144){
         arrowNext.href='#'
         arrowNext.onclick = () =>{
             pokemonInitial = pokemonInitial + pokemonsPage
             showPokemons()
+
         }   
     } 
     paginatorDiv.appendChild(arrowNext)   
-
     for (let i = 1 ; i< totalPages+1; i++){
         const item = document.createElement('a')
         item.innerHTML = `${i}`
@@ -153,8 +154,10 @@ function printPaginator ()  {
             item.classList.add('is-current')
             showPokemons()
         }
-        paginationList.appendChild(item)   
+        paginatorDiv.appendChild(item)   
     }
+
+   
 }
 function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))

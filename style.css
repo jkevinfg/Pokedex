@@ -39,3 +39,9 @@
   height: 60px;
 
 }
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  flex-flow: wrap;
+}
