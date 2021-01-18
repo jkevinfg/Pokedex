@@ -39,9 +39,15 @@
   height: 60px;
 
 }
-
+  .actual {
+      background-color: #118AB2;
+  }
 .columns {
   display: flex;
   flex-direction: row;
   flex-flow: wrap;
+}
+img {
+    width: 50px;
+    height: 10px;
 }

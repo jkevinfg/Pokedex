@@ -6,7 +6,7 @@ const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
 const optiones = document.querySelector('#optiones')
 
-let pokemonsPage = 9 // cuantos pokemones por pagina se van a mostrar
+let pokemonsPage = 6 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
 let totalPages  // total de paginas 
 
@@ -41,6 +41,15 @@ async function validate (event)  {
         try{
             const pokemonsearch = await fetchPokemon(pokemon)
             clearHtml(result)
+            clearHtml(paginatorDiv)
+            inputPokemon.value = ''
+            const boton = document.createElement('a')
+            boton.href = '#'
+            boton.textContent = 'Volver al listado general'
+            boton.onclick = () =>{
+                showPokemons()
+            }
+            paginatorDiv.appendChild(boton)
             showPokemon(pokemonsearch)}
         catch{
             showError("Este pokemon no existe 🙄")
@@ -49,8 +58,8 @@ async function validate (event)  {
 }
 async function filter(event) {
     clearHtml(optiones)
-    const pokemons =  await fetchPokemons(0,151)
-    const  text = event.target.value.toLowerCase().trim()
+    const pokemons =  await fetchPokemons(0,150)
+    const  text = event.target.value.toLowerCase()
         for (let pokemon of pokemons){
             let name = pokemon.name
             if(name.indexOf(text) === 0  && text.length > 0){
@@ -62,7 +71,7 @@ async function filter(event) {
 }                                              
 
 async function showPokemons() {
-    loader() 
+
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
@@ -116,36 +125,13 @@ function  showPokemon (datos) {
     })
 
 }
+
+
+
+
 function printPaginator ()  {   
-    totalPages = pages(151)
-    console.log(totalPages)
-    console.log(pokemonInitial)
+    totalPages = pages(150)
 
-    const arrowBack = document.createElement('a')
-    arrowBack.innerHTML = 'Atrás'
-    arrowBack.classList.add('pagination-previous')
-    if(pokemonInitial > 0){
-        arrowBack.href = '#'
-        arrowBack.onclick = () =>{
-            pokemonInitial = pokemonInitial - pokemonsPage
-            showPokemons()
-
-            }
-        }   
-    paginatorDiv.appendChild(arrowBack)
- 
-    const arrowNext = document.createElement('a')
-    arrowNext.innerHTML = 'Siguiente'
-    arrowNext.classList.add('pagination-next')
-    if(pokemonInitial < 144){
-        arrowNext.href='#'
-        arrowNext.onclick = () =>{
-            pokemonInitial = pokemonInitial + pokemonsPage
-            showPokemons()
-
-        }   
-    } 
-    paginatorDiv.appendChild(arrowNext)   
     for (let i = 1 ; i< totalPages+1; i++){
         const item = document.createElement('a')
         item.innerHTML = `${i}`
@@ -157,8 +143,10 @@ function printPaginator ()  {
         }
         paginatorDiv.appendChild(item)   
     }
+    const pageactual = pokemonInitial/pokemonsPage + 1;
+    const actual = document.querySelector(`.page${pageactual}`)
+    actual.style.background = "red";
 
-   
 }
 function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))
