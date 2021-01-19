@@ -117,19 +117,27 @@ function  showPokemon (datos) {
                         </div>
           
                         `
-        // hp bg-sucess
-        // attack bg-info
-        // defense bg-warning
-        // special-atack bg-danger
-        // special - defense "sin nada"
-        // speed
 
         const progressBar = document.querySelector(`.${name}${id}`)
+        switch(name) {
+            case 'hp':
+                progressBar.classList.add('bg-success')
+                break
+            case 'attack':
+                progressBar.classList.add('bg-danger')
+                break
+            case 'defense':
+                progressBar.classList.add('bg-warning')
+                break
+            case 'special-attack':
+                progressBar.classList.add('special-attack')
+                break
+            case 'speed':
+                progressBar.classList.add('bg-info')
+                break
 
-
-
-        progressBar.classList.add('bg-danger')
-        progressBar.style.width = `${(base_stat/130)*100}%`
+        }
+        progressBar.style.width = `${(base_stat/120)*100}%`
     })
 
 
@@ -142,20 +150,22 @@ function printPaginator ()  {
     totalPages = pages(150)
 
     for (let i = 1 ; i< totalPages+1; i++){
+        const pageitem = document.createElement('li')
         const item = document.createElement('a')
         item.innerHTML = `${i}`
-        item.classList.add('pagination-link',`page${i}`)
+        item.href = '#'
+        item.classList.add('page-link',`page${i}`)
+        pageitem.classList.add('page-item')
+        pageitem.appendChild(item)
         item.onclick = () => {
             pokemonInitial = (i-1)*pokemonsPage
-            item.classList.add('is-current')
             showPokemons()
         }
-        paginatorDiv.appendChild(item)   
+        paginatorDiv.appendChild(pageitem)
     }
     const pageactual = pokemonInitial/pokemonsPage + 1;
     const actual = document.querySelector(`.page${pageactual}`)
-    actual.style.background = "red";
-
+    actual.parentElement.classList.add('active')
 }
 function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))
