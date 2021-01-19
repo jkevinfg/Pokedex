@@ -3,51 +3,6 @@
     box-shadow: 0 0 40px -10px rgba(0, 0, 0, 0.25);
   }
 
-.progressBarhp {
-    height: 1.0rem;
-    background-color: #EF476F;
-    width: 0%;
-}
-
-.progressBarattack {
-    height: 1.0rem;
-    background-color: #FFD166;
-    width: 0%;
-}
-.progressBardefense {
-    height: 1.0rem;
-    background-color:  #06D6A0;
-    width: 0%;
-}
-.progressBarspecial-attack {
-    height: 1.0rem;
-    background-color: #118AB2;
-    width: 0%;
-}
-.progressBarspecial-defense {
-    height: 1.0rem;
-    background-color: #b8a9c9;
-    width: 0%;
-}
-.progressBarspeed {
-    height: 1.0rem;
-    background-color:#5b9aa0;
-    width: 0%;
-}
-.loader{
-  width: 60px;
-  height: 60px;
-
-}
-  .actual {
-      background-color: #118AB2;
-  }
-.columns {
-  display: flex;
-  flex-direction: row;
-  flex-flow: wrap;
-}
-img {
-    width: 50px;
-    height: 10px;
+#result img {
+    max-width: 80%;
 }

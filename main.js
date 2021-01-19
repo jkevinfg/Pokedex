@@ -85,44 +85,53 @@ async function showPokemons() {
 }
 function  showPokemon (datos) {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
-    result.innerHTML  += `
-                    <div class="column is-4 card">
-                            <div class=" image is-5by4 card__header">
-                                <div>#${id}</div>
-                                <img src="${front_default}" alt="">
-                            </div>
-                            <div class=" card__body">
-                                <div class="card__body__name">
-                                Name : ${name}
-                                </div>
-                                <div class="card__body__text">
-                                    <div class="card__body__text__type type${id}">
-                                     Type :
-                                    </div>
-                                    <div class="card__body__text__dimensions">
-                                        <p>Height : ${height/10}m</p>
-                                        <p>Weight :  ${weight/10}kg</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card__stats_stat stats${id} "></div>   
-                        </div>`
-    stats.forEach((stat) => {
-        const  {base_stat, stat : {name}}  =  stat
-        const text2 = document.querySelector(`.stats${id}`)
-        text2.innerHTML += `<div class="card__stats_stat__name" > ${name}        
-                            </div>
-                            <div class="card__stats_stat__value progressBar${name}  ${name}${id}"> 
-                                 ${base_stat}
-                             </div>`
-        const progressBar = document.querySelector(`.${name}${id}`)
-        progressBar.style.width = `${(base_stat/160)*100}%`
-    })
+    result.innerHTML  += `             
+                         <div class="col-10 offset-1 col-md-4 offset-md-0 ">
+                             <div class="card" >                              
+                              <img src="${front_default}" class="card-img-top mx-auto img-fluid " alt="...">
+                              <div class="card-body">
+                                <h5 class="card-title">${name}</h5>
+                                            <p  class="card-text" >Height : ${height/10}m</p>
+                                            <p  class="card-text">Weight :  ${weight/10}kg</p>
+                                    <div class="card__body__text__type type${id}">  Type :</div>
+                                    <div class="card__stats_stat stats${id} "></div>  
+                              </div>
+                             </div>
+                       
+                        </div>
+                        `
     types.forEach((item) => {
         const { type : {name} } = item
         const text = document.querySelector(`.type${id}`)
         text.innerHTML += `${name} `
     })
+    stats.forEach((stat) => {
+        const  {base_stat, stat : {name}}  =  stat
+        const text2 = document.querySelector(`.stats${id}`)
+        text2.innerHTML += `<div class="card-text card__stats_stat__name" > ${name}        
+                            </div>                 
+                        <div class="progress">
+                                <div class="progress-bar  ${name}${id}" role="progressbar" style="width: 0%" >
+                                 ${base_stat}
+                                </div>
+                        </div>
+          
+                        `
+        // hp bg-sucess
+        // attack bg-info
+        // defense bg-warning
+        // special-atack bg-danger
+        // special - defense "sin nada"
+        // speed
+
+        const progressBar = document.querySelector(`.${name}${id}`)
+
+
+
+        progressBar.classList.add('bg-danger')
+        progressBar.style.width = `${(base_stat/130)*100}%`
+    })
+
 
 }
 
