@@ -5,18 +5,15 @@ const messageError  = document.querySelector('.message-error')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
 const optiones = document.querySelector('#optiones')
-
 let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
 let totalPages  // total de paginas 
-
 
 window.onload = () => {
     form.addEventListener('submit', validate)
     inputPokemon.addEventListener('input',filter)
     showPokemons()
 };
-
 
 async function  fetchPokemon  (nameOrId) {
     const url = `https://pokeapi.co/api/v2/pokemon/${nameOrId}`
@@ -30,7 +27,6 @@ async function fetchPokemons (pokemonInitial,pokemonsPage) {
     const resultado = await respuesta.json()
     return resultado.results
 }
-//
 
 async function validate (event)  {
     event.preventDefault()
@@ -70,8 +66,7 @@ async function filter(event) {
                 optiones.appendChild(optionPokemon)
             }
         }
-}                                              
-
+}
 async function showPokemons() {
 
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
@@ -138,16 +133,10 @@ function  showPokemon (datos) {
             case 'speed':
                 progressBar.classList.add('bg-info')
                 break
-
         }
         progressBar.style.width = `${(base_stat/120)*100}%`
     })
-
-
 }
-
-
-
 
 function printPaginator ()  {   
     totalPages = pages(150)
@@ -174,8 +163,6 @@ function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))
 }
 
-
-    
 function showError (message)  {
     const confirm = document.querySelector('.message')
     if(!confirm){
