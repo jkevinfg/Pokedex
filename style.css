@@ -5,3 +5,7 @@
     height: 320px;
     width: 320px;
 }
+.col-center{
+    float: none;
+    margin: 0 auto;
+}

@@ -142,13 +142,13 @@ function  showPokemon (datos) {
 
 function printPaginator ()  {   
     totalPages = pages(totalpokemon)
-
-
+      const pageactual = pokemonInitial/pokemonsPage + 1;
+    console.log(pageactual)
     const itemBack = document.createElement('li')
     itemBack.classList.add('page-item')
     const arrowBack = document.createElement('a')
     arrowBack.classList.add('page-link')
-    arrowBack.innerHTML = 'Atrás'
+    arrowBack.innerHTML = '<'
     itemBack.appendChild(arrowBack)
     if(pokemonInitial=== 0){
         itemBack.classList.add('disabled')
@@ -163,6 +163,11 @@ function printPaginator ()  {
     }
     paginatorDiv.appendChild(itemBack)
 
+
+    //listado
+    const actualboton = document.createElement('li')
+    actualboton.classList.add('page-item')
+    const actualItem = document.createElement('a')
      for (let i = 1 ; i< totalPages+1; i++){
         if(i<=2 || i === totalPages){
              const pageitem = document.createElement('li')
@@ -177,13 +182,26 @@ function printPaginator ()  {
                 showPokemons()
             }
             paginatorDiv.appendChild(pageitem)
+        }else{
+            if(pageactual>2 && pageactual != totalPages){
+                 actualItem.classList.add('page-link',`page${pageactual}`)
+                actualItem.innerHTML = `${pageactual}`
+            }else{
+                 actualItem.classList.add('page-link')
+                actualItem.innerHTML = `...`
+            }
+            actualboton.appendChild(actualItem)
+            paginatorDiv.appendChild(actualboton)
         }
     }
+
+
+    //
     const itemNext = document.createElement('li')
     itemNext.classList.add('page-item')
     const arrowNext = document.createElement('a')
     arrowNext.classList.add('page-link')
-    arrowNext.innerHTML = 'Siguiente'
+    arrowNext.innerHTML = '>'
     itemNext.appendChild(arrowNext)
      if(pokemonInitial===  totalpokemon - pokemonsPage){
         itemNext.classList.add('disabled')
@@ -197,20 +215,7 @@ function printPaginator ()  {
     }
     paginatorDiv.appendChild(itemNext)
 
-
-    const pageactual = pokemonInitial/pokemonsPage + 1;
-
-    const actualboton = document.createElement('li')
-    actualboton.classList.add('page-item')
-    const actualItem = document.createElement('a')
-    if(pageactual > 2 && pageactual != totalPages){
-        actualItem.classList.add('page-link',`page${pageactual}`)
-        actualItem.innerHTML = `${pageactual}`
-        actualboton.appendChild(actualItem)
-        paginatorDiv.appendChild(actualboton)
-    }
-
-      const actual = document.querySelector(`.page${pageactual}`)
+    const actual = document.querySelector(`.page${pageactual}`)
     actual.parentElement.classList.add('active')
 
 
