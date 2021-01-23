@@ -12,39 +12,36 @@
 
 
 
-<section>
+<section >
     <div class="container">
-        <h1 class="title"> Pokedex - Primera Generación </h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-0  col-10 offset-1 ">
+                <h1 class="title "> Pokedex </h1>
+
+            </div>
+        </div>
         <form action=""  id="form" >
-            <div class="row mt-4" >
-                    <div class="col-md-4">
+            <div class="row mt-2" >
+                    <div class="col-md-4 offset-md-0  col-10 offset-1 ">
                         <input list="optiones" autocomplete =off  id="inputPokemon"   class="form-control"  placeholder="Encuentra a tu pokemon" type="text">
                         <datalist id="optiones">
                         </datalist>
-                        <div class="message-error">
-                        </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-8 offset-md-0  col-10 offset-1 ">
                         <button  type="submit" class="btn btn-primary">Buscar </button>
                     </div>
             </div>
         </form>
-        <div class="row mt-4">
-            <div class="col-10 offset-1">
-                <div class="pagination ">
-                    <ul id="paginator" class="pagination flex-wrap" >
 
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
 
 
-<section>
+<section >
     <div class="container mt-4">
+        <div class="message-error">
+        </div>
         <div class="row" id="result">
 
         </div>
@@ -52,6 +49,20 @@
 
 </section>
 
+
+<section>
+    <div class="container">
+            <div class="row mt-4">
+                <div class="col-10 offset-1">
+                    <div class="pagination ">
+                        <ul id="paginator" class="pagination flex-wrap" >
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
 
 <footer id="footer" class="pb-4 pt-4">
     <div class="container ">

@@ -6,14 +6,14 @@ const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
 const optiones = document.querySelector('#optiones')
 
-let pokemonsPage = 6 // cuantos pokemones por pagina se van a mostrar
+let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
 let totalPages  // total de paginas 
 
 
 window.onload = () => {
     form.addEventListener('submit', validate)
-    inputPokemon.addEventListener('keydown',filter)
+    inputPokemon.addEventListener('input',filter)
     showPokemons()
 };
 
@@ -40,7 +40,9 @@ async function validate (event)  {
     }else{
         try{
             const pokemonsearch = await fetchPokemon(pokemon)
+
             clearHtml(result)
+            clearHtml(messageError)
             clearHtml(paginatorDiv)
             inputPokemon.value = ''
             const boton = document.createElement('a')
@@ -49,7 +51,7 @@ async function validate (event)  {
             boton.onclick = () =>{
                 showPokemons()
             }
-            paginatorDiv.appendChild(boton)
+            messageError.appendChild(boton)
             showPokemon(pokemonsearch)}
         catch{
             showError("Este pokemon no existe 🙄")
@@ -62,7 +64,7 @@ async function filter(event) {
     const  text = event.target.value.toLowerCase()
         for (let pokemon of pokemons){
             let name = pokemon.name
-            if(name.indexOf(text) === 0  && text.length > 0){
+            if(name.indexOf(text) === 0  && text.length > 0 && text.length < 4){
                 const optionPokemon = document.createElement('option')
                 optionPokemon.value = `${name}`
                 optiones.appendChild(optionPokemon)
@@ -80,6 +82,7 @@ async function showPokemons() {
             showPokemon(pokemon)
     }
     clearHtml(paginatorDiv)
+    clearHtml(messageError)
     printPaginator()
 
 }
