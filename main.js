@@ -8,6 +8,8 @@ const optiones = document.querySelector('#optiones')
 let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
 let totalPages  // total de paginas 
+const totalpokemon = 150
+
 
 window.onload = () => {
     form.addEventListener('submit', validate)
@@ -56,7 +58,7 @@ async function validate (event)  {
 }
 async function filter(event) {
     clearHtml(optiones)
-    const pokemons =  await fetchPokemons(0,150)
+    const pokemons =  await fetchPokemons(0,totalpokemon)
     const  text = event.target.value.toLowerCase()
         for (let pokemon of pokemons){
             let name = pokemon.name
@@ -139,25 +141,81 @@ function  showPokemon (datos) {
 }
 
 function printPaginator ()  {   
-    totalPages = pages(150)
+    totalPages = pages(totalpokemon)
 
-    for (let i = 1 ; i< totalPages+1; i++){
-        const pageitem = document.createElement('li')
-        const item = document.createElement('a')
-        item.innerHTML = `${i}`
-        item.href = '#'
-        item.classList.add('page-link',`page${i}`)
-        pageitem.classList.add('page-item')
-        pageitem.appendChild(item)
-        item.onclick = () => {
-            pokemonInitial = (i-1)*pokemonsPage
+
+    const itemBack = document.createElement('li')
+    itemBack.classList.add('page-item')
+    const arrowBack = document.createElement('a')
+    arrowBack.classList.add('page-link')
+    arrowBack.innerHTML = 'Atrás'
+    itemBack.appendChild(arrowBack)
+    if(pokemonInitial=== 0){
+        itemBack.classList.add('disabled')
+    }
+    if(pokemonInitial > 0){
+        arrowBack.href = '#'
+        arrowBack.onclick = () =>{
+            pokemonInitial = pokemonInitial - pokemonsPage
+            showPokemons()
+
+            }
+    }
+    paginatorDiv.appendChild(itemBack)
+
+     for (let i = 1 ; i< totalPages+1; i++){
+        if(i<=2 || i === totalPages){
+             const pageitem = document.createElement('li')
+            const item = document.createElement('a')
+             item.innerHTML = `${i}`
+            item.href = '#'
+            item.classList.add('page-link',`page${i}`)
+            pageitem.classList.add('page-item')
+            pageitem.appendChild(item)
+            item.onclick = () => {
+                pokemonInitial = (i-1)*pokemonsPage
+                showPokemons()
+            }
+            paginatorDiv.appendChild(pageitem)
+        }
+    }
+    const itemNext = document.createElement('li')
+    itemNext.classList.add('page-item')
+    const arrowNext = document.createElement('a')
+    arrowNext.classList.add('page-link')
+    arrowNext.innerHTML = 'Siguiente'
+    itemNext.appendChild(arrowNext)
+     if(pokemonInitial===  totalpokemon - pokemonsPage){
+        itemNext.classList.add('disabled')
+    }
+    if(pokemonInitial < totalpokemon - pokemonsPage){
+        arrowNext.href='#'
+        arrowNext.onclick = () =>{
+            pokemonInitial = pokemonInitial + pokemonsPage
             showPokemons()
         }
-        paginatorDiv.appendChild(pageitem)
     }
+    paginatorDiv.appendChild(itemNext)
+
+
     const pageactual = pokemonInitial/pokemonsPage + 1;
-    const actual = document.querySelector(`.page${pageactual}`)
+
+    const actualboton = document.createElement('li')
+    actualboton.classList.add('page-item')
+    const actualItem = document.createElement('a')
+    if(pageactual > 2 && pageactual != totalPages){
+        actualItem.classList.add('page-link',`page${pageactual}`)
+        actualItem.innerHTML = `${pageactual}`
+        actualboton.appendChild(actualItem)
+        paginatorDiv.appendChild(actualboton)
+    }
+
+      const actual = document.querySelector(`.page${pageactual}`)
     actual.parentElement.classList.add('active')
+
+
+
+
 }
 function  pages (total)  {
     return parseInt(Math.ceil(total / pokemonsPage))
