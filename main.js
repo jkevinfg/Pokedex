@@ -71,6 +71,7 @@ async function filter(event) {
 }
 
 async function showPokemons() {
+    loader();
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
@@ -91,8 +92,8 @@ function  showPokemon (datos) {
                               <img src="${front_default}" class="card-img-top mx-auto img-fluid " alt="...">
                               <div class="card-body">
                                 <h5 class="card-title">${name}</h5>
-                                            <p  class="card-text" >Height : ${height/10}m</p>
-                                            <p  class="card-text">Weight :  ${weight/10}kg</p>
+                                            <p  class="card-text m-0" >Height : ${height/10}m</p>
+                                            <p  class="card-text m-0">Weight :  ${weight/10}kg</p>
                                     <div class="card__body__text__type type${id}">  Type :</div>
                                     <div class="card__stats_stat stats${id} "></div>  
                               </div>
@@ -237,7 +238,23 @@ function  clearHtml (block) {
     }
 }
 function  loader() {
+    clearHtml(result)
     const divLoader = document.createElement('div')
-    divLoader.innerHTML = `Cargando...`
+    divLoader.classList.add('sk-fading-circle')
+    divLoader.innerHTML = `
+         <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+    `
     result.appendChild(divLoader)
 }
+
