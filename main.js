@@ -38,18 +38,18 @@ async function validate (event)  {
     }else{
         try{
             const pokemonsearch = await fetchPokemon(pokemon)
-
             clearHtml(result)
             clearHtml(messageError)
             clearHtml(paginatorDiv)
             inputPokemon.value = ''
             const boton = document.createElement('a')
             boton.href = '#'
+            boton.classList.add('text-center')
             boton.textContent = 'Volver al listado general'
             boton.onclick = () =>{
                 showPokemons()
             }
-            messageError.appendChild(boton)
+            paginatorDiv.appendChild(boton)
             showPokemon(pokemonsearch)}
         catch{
             showError("Este pokemon no existe 🙄")
@@ -69,8 +69,8 @@ async function filter(event) {
             }
         }
 }
-async function showPokemons() {
 
+async function showPokemons() {
     const pokemons =  await fetchPokemons(pokemonInitial,pokemonsPage)
     clearHtml(result)
     for ( let i = 0 ; i<pokemons.length;i++){
@@ -81,8 +81,8 @@ async function showPokemons() {
     clearHtml(paginatorDiv)
     clearHtml(messageError)
     printPaginator()
-
 }
+
 function  showPokemon (datos) {
     const {name, sprites :{other:{dream_world:{ front_default}}} , types , height,weight,stats,id} = datos
     result.innerHTML  += `             
@@ -117,7 +117,6 @@ function  showPokemon (datos) {
                         </div>
           
                         `
-
         const progressBar = document.querySelector(`.${name}${id}`)
         switch(name) {
             case 'hp':
@@ -163,13 +162,12 @@ function printPaginator ()  {
     }
     paginatorDiv.appendChild(itemBack)
 
-
-    //listado
     const actualboton = document.createElement('li')
     actualboton.classList.add('page-item')
     const actualItem = document.createElement('a')
+
      for (let i = 1 ; i< totalPages+1; i++){
-        if(i<=2 || i === totalPages){
+        if(i<=2 || i >= totalPages-1){
              const pageitem = document.createElement('li')
             const item = document.createElement('a')
              item.innerHTML = `${i}`
@@ -183,7 +181,7 @@ function printPaginator ()  {
             }
             paginatorDiv.appendChild(pageitem)
         }else{
-            if(pageactual>2 && pageactual != totalPages){
+            if(pageactual>2 && pageactual < totalPages-1){
                  actualItem.classList.add('page-link',`page${pageactual}`)
                 actualItem.innerHTML = `${pageactual}`
             }else{
@@ -191,12 +189,11 @@ function printPaginator ()  {
                 actualItem.innerHTML = `...`
             }
             actualboton.appendChild(actualItem)
+
             paginatorDiv.appendChild(actualboton)
         }
     }
 
-
-    //
     const itemNext = document.createElement('li')
     itemNext.classList.add('page-item')
     const arrowNext = document.createElement('a')
@@ -214,12 +211,8 @@ function printPaginator ()  {
         }
     }
     paginatorDiv.appendChild(itemNext)
-
     const actual = document.querySelector(`.page${pageactual}`)
     actual.parentElement.classList.add('active')
-
-
-
 
 }
 function  pages (total)  {
@@ -236,7 +229,6 @@ function showError (message)  {
         setTimeout(()=> {
             text.remove()
         },3000)
-
     }
 }
 function  clearHtml (block) {
