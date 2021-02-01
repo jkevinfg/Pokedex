@@ -4,6 +4,7 @@ const form = document.querySelector('#form')
 const messageError  = document.querySelector('.message-error')
 const inputPokemon = document.querySelector('#inputPokemon')
 const paginatorDiv = document.querySelector('#paginator')
+const footer = document.querySelector('#footer')
 const optiones = document.querySelector('#optiones')
 let pokemonsPage = 3 // cuantos pokemones por pagina se van a mostrar
 let pokemonInitial = 0 // apartir de que pokemon listamos
@@ -62,7 +63,7 @@ async function filter(event) {
     const  text = event.target.value.toLowerCase()
         for (let pokemon of pokemons){
             let name = pokemon.name
-            if(name.indexOf(text) === 0  && text.length > 0 && text.length < 4){
+            if(name.indexOf(text) === 0  && text.length > 0 && text.length < 6){
                 const optionPokemon = document.createElement('option')
                 optionPokemon.value = `${name}`
                 optiones.appendChild(optionPokemon)
