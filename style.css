@@ -25,6 +25,10 @@
     top: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 .sk-fading-circle .sk-circle:before {
     content: '';
     display: block;
