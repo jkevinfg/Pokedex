@@ -1,6 +1,6 @@
 # Pokedex Javascript-Bootstrap 5
 Consumiendo la api de pokemon.
-https://jairkevinfg.github.io/Pokedex/
+https://jkevinfg.github.io/Pokedex/
 
 
 
